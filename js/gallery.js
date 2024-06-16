@@ -66,9 +66,8 @@ const images = [
 
 /* У тебе є контейнер, в який можна додати елементи галереї, і дані, за якими їх можна створити. Саме час наповнювати галерею розміткою.
 
-Використовуй масив об’єктів images і цей HTML шаблон елемента галереї та створи в JavaScript коді розмітку елементів, після чого додай усю розмітку всередину ul.gallery. Не додавай інші HTML теги, крім тих, що містяться в цьому шаблоні.
-
-
+Використовуй масив об’єктів images і цей HTML шаблон елемента галереї та створи в JavaScript коді розмітку елементів,
+після чого додай усю розмітку всередину ul.gallery. Не додавай інші HTML теги, крім тих, що містяться в цьому шаблоні.
 
 <li class="gallery-item">
   <a class="gallery-link" href="large-image.jpg">
@@ -84,7 +83,36 @@ const images = [
 В атрибуті src тега <img> вказуємо посилання на маленьку версію зображення.
 Для атрибута alt використовуємо опис зображення.
 Посилання на велике зображення повинно зберігатися в data-атрибуті source на елементі <img>, і вказуватися в href посилання.
-Зверни увагу на те, що зображення огорнуте посиланням, у якого атрибут href вказує на шлях до файлу з зображенням. Отже клік по ньому може викликати завантаження зображення на комп’ютер користувача. Заборони цю поведінку за замовчуванням. */
+Зверни увагу на те, що зображення огорнуте посиланням, у якого атрибут href вказує на шлях до файлу з зображенням.
+Отже клік по ньому може викликати завантаження зображення на комп’ютер користувача. Заборони цю поведінку за замовчуванням. */
 
 /* https://www.edu.goit.global/uk/learn/10760924/18936918/19852910/homework 
 https://www.figma.com/file/m8k9NQV7qZrtYDCvxfD68B/%D0%94%D0%97-JavaScript?type=design&node-id=3-941&mode=design*/
+
+const galleryBox = document.querySelector(".gallery");
+
+const createGallery = (images) => {
+  return images.map(({ preview, original, description }) => `
+    <li class="gallery-item">
+      <a class="gallery-link" href="${original}">
+        <img
+          class="gallery-image"
+          src="${preview}"
+          data-source="${original}"
+          alt="${description}"
+        />
+      </a>
+    </li>
+  `).join("");
+};
+
+galleryBox.innerHTML = createGallery(images);
+
+galleryBox.addEventListener("click", (event) => {
+  event.preventDefault();
+  if (event.target.classList.contains("gallery-image")) {
+    const originalImageURL = event.target.dataset.source;
+    const lightBox = basicLightbox.create(`<img src="${originalImageURL}" width="1112" height="640">`);
+    lightBox.show();
+  };
+});
